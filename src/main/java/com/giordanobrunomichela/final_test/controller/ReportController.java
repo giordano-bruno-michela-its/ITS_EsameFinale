@@ -1,0 +1,49 @@
+package com.giordanobrunomichela.final_test.controller;
+
+import com.giordanobrunomichela.final_test.dto.ReportDTO;
+import com.giordanobrunomichela.final_test.service.ReportService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/reports")
+@CrossOrigin(origins = "http://localhost:3000")
+public class ReportController {
+
+    private final ReportService reportService;
+
+    public ReportController(ReportService reportService) {
+        this.reportService = reportService;
+    }
+
+    @GetMapping("/all")
+    public List<ReportDTO> getAllReports() {
+        return reportService.getAllReports();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReportDTO> getReportById(@PathVariable Long id) {
+        ReportDTO dto = reportService.getReportById(id);
+        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<ReportDTO> createReport(@RequestBody ReportDTO reportDTO) {
+        ReportDTO created = reportService.createReport(reportDTO);
+        return ResponseEntity.ok(created);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ReportDTO> updateReport(@PathVariable Long id, @RequestBody ReportDTO dto) {
+        ReportDTO updated = reportService.updateReport(id, dto);
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
+        reportService.deleteReport(id);
+        return ResponseEntity.noContent().build();
+    }
+}

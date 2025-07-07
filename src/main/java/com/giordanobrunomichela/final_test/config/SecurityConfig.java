@@ -63,6 +63,7 @@ public class SecurityConfig {
                     authorize.requestMatchers("/api/auth/**", "/api/formreq/updatefromcode", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll();
                     authorize.requestMatchers("/api/formreq/create").permitAll();
                     authorize.requestMatchers("/api/generalentity/**").permitAll();
+                    authorize.requestMatchers("/api/**").permitAll();
                     authorize.requestMatchers("/api/formreq/createbooking").permitAll();
                     authorize.requestMatchers("/api/formnewsletter/create").permitAll();
                     authorize.requestMatchers("/api/formreq/code").permitAll();

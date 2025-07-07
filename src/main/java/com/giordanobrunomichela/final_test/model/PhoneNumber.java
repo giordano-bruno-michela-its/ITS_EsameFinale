@@ -19,8 +19,8 @@ public class PhoneNumber {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private String name;
     private String description;
-    private String number;
-    
+    private String phoneNumber;
+    private Integer spamReportCount;
+    private PhoneNumberStatus phoneNumberStatus = PhoneNumberStatus.NOSPAM;
 }
