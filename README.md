@@ -5,9 +5,13 @@
 
 L'avvio su Windows può essere effettuato tramite WSL o Docker Desktop.
 
-### Preparazione
+Con Docker Desktop è tutto predisposto per la connessione db su localhost, mentre con WSL è necessario configurare l'ip nel file .env.
 
-- Da terminale (su Linux) o da WSL/Powershell (su Windows) assicurarsi di salvare l'ip locale da inserire nel file .env nella variabile d'ambiente **WSL_DB_HOST**.
+### Preparazione (se con WSL)
+
+Da terminale (su Linux) o da WSL/Powershell (su Windows) assicurarsi di salvare l'ip locale da inserire nel file .env nella variabile d'ambiente **WSL_DB_HOST**.
+
+Nel caso si usi WSL:
 
 ```sh
 ip addr show eth0
@@ -26,19 +30,6 @@ Esempio:
             valid_lft forever preferred_lft forever
 
 L'IP in questo esempio è 172.18.104.83
-
-### Powershell (Windows)
-
-```sh
-Get-NetAdapter
-```
-
-```sh
-Get-NetIPAddress -InterfaceAlias "Ethernet"
-```
-
-Sostituire "Ethernet" con il nome della propria interfaccia di rete.
-
 
 ### Avvio
 
@@ -61,7 +52,7 @@ Documentazione Javadoc Maven visionabile nel file **/javadoc_maven/apidocs.zip**
 ### Informazioni tecniche
 
 - Backend: Java 17, Spring Boot 3.4, Maven 3.9
-- Database: MySQL
+- Database: MySQL (in Docker container)
 - Approccio strutturale: MVC, REST API, code-first (le tabelle vengono generate automaticamente dall'app
 tramite hibernate, se assenti o modificate)
 - Strumenti di sviluppo backend: JetBrains IntelliJ IDEA, Visual Studio Code, Docker

@@ -1,5 +1,6 @@
 package com.giordanobrunomichela.final_test.controller;
 
+import com.giordanobrunomichela.final_test.dto.RemoveSpamRequestDTO;
 import com.giordanobrunomichela.final_test.dto.ReportDTO;
 import com.giordanobrunomichela.final_test.service.ReportService;
 import org.springframework.http.ResponseEntity;
@@ -59,8 +60,8 @@ public class ReportController {
     }
 
     @PostMapping("/remove-spam")
-    public ResponseEntity<String> removeAllSpamReports(@RequestBody Map<String, String> request) {
-        String phoneNumber = request.get("phoneNumber");
+    public ResponseEntity<String> removeAllSpamReports(@RequestBody RemoveSpamRequestDTO request) {
+        String phoneNumber = request.getPhoneNumber();
 
         if (phoneNumber == null || phoneNumber.isEmpty()) {
             return ResponseEntity.badRequest().body("Phone number is required");
