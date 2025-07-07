@@ -5,6 +5,7 @@ import com.giordanobrunomichela.final_test.model.Report;
 import com.giordanobrunomichela.final_test.repository.ReportRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,6 +32,7 @@ public class ReportService {
 
     public ReportDTO createReport(ReportDTO reportDTO) {
         Report report = convertToEntity(reportDTO);
+        report.setReportDate(new Date());
         return convertToDTO(reportRepository.save(report));
     }
 
