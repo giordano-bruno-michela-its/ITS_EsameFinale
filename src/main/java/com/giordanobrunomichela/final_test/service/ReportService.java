@@ -36,10 +36,18 @@ public class ReportService {
                 .orElse(null);
     }
 
+    private void updatePhoneNumberStatus(PhoneNumber phoneNumber) {
+        if (phoneNumber.getSpamReportCount() > 3) {
+            phoneNumber.setPhoneNumberStatus(PhoneNumberStatus.SPAM);
+        } else {
+            phoneNumber.setPhoneNumberStatus(PhoneNumberStatus.NOSPAM);
+        }
+    }
+
     public ReportDTO createReport(ReportDTO reportDTO) {
         Report report = convertToEntity(reportDTO);
         report.setReportDate(new Date());
-        
+
         if (report.getPhoneNumber() != null) {
             Optional<PhoneNumber> existingPhoneNumber = phoneNumberRepository.findByPhoneNumber(report.getPhoneNumber());
 
@@ -49,19 +57,21 @@ public class ReportService {
                 phoneNumber.setPhoneNumber(report.getPhoneNumber());
                 phoneNumber.setDescription(report.getDescription());
                 phoneNumber.setPhoneNumberStatus(PhoneNumberStatus.NOSPAM);
-                
+
                 if (report.getReportType() == ReportType.SPAM) {
                     phoneNumber.setSpamReportCount(1);
                 } else {
                     phoneNumber.setSpamReportCount(0);
                 }
 
+                updatePhoneNumberStatus(phoneNumber);
                 phoneNumber = phoneNumberRepository.save(phoneNumber);
             } else {
                 phoneNumber = existingPhoneNumber.get();
-                
+
                 if (report.getReportType() == ReportType.SPAM) {
                     phoneNumber.setSpamReportCount(phoneNumber.getSpamReportCount() + 1);
+                    updatePhoneNumberStatus(phoneNumber);
                     phoneNumber = phoneNumberRepository.save(phoneNumber);
                 }
             }
@@ -97,25 +107,26 @@ public class ReportService {
     } */
 
     public void deleteReport(Long id) {
-    Optional<Report> reportOpt = reportRepository.findById(id);
-    if (reportOpt.isPresent()) {
-        Report report = reportOpt.get();
-        
-        if (report.getReportType() == ReportType.SPAM && report.getPhoneNumberId() != null) {
-            Optional<PhoneNumber> phoneNumberOpt = phoneNumberRepository.findById(report.getPhoneNumberId());
-            if (phoneNumberOpt.isPresent()) {
-                PhoneNumber phoneNumber = phoneNumberOpt.get();
-                int currentCount = phoneNumber.getSpamReportCount();
-                if (currentCount > 0) {
-                    phoneNumber.setSpamReportCount(currentCount - 1);
-                    phoneNumberRepository.save(phoneNumber);
+        Optional<Report> reportOpt = reportRepository.findById(id);
+        if (reportOpt.isPresent()) {
+            Report report = reportOpt.get();
+
+            if (report.getReportType() == ReportType.SPAM && report.getPhoneNumberId() != null) {
+                Optional<PhoneNumber> phoneNumberOpt = phoneNumberRepository.findById(report.getPhoneNumberId());
+                if (phoneNumberOpt.isPresent()) {
+                    PhoneNumber phoneNumber = phoneNumberOpt.get();
+                    int currentCount = phoneNumber.getSpamReportCount();
+                    if (currentCount > 0) {
+                        phoneNumber.setSpamReportCount(currentCount - 1);
+                        updatePhoneNumberStatus(phoneNumber);
+                        phoneNumberRepository.save(phoneNumber);
+                    }
                 }
             }
+
+            reportRepository.deleteById(id);
         }
-        
-        reportRepository.deleteById(id);
     }
-}
 
     public ReportDTO convertToDTO(Report report) {
         ReportDTO dto = new ReportDTO();
