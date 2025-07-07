@@ -866,7 +866,7 @@
 						}
 					}
 				},
-				"url": "{{base_url}}/phonenumbers/delete/2",
+				"url": "{{base_url}}/phonenumbers/delete/1",
 				"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
 			},
 			"response": []
@@ -896,7 +896,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"description\": \"General commercial call\",\r\n  \"reportType\": \"NOSPAM\"\r\n}",
+					"raw": "{\r\n  \"description\": \"General commercial call\",\r\n  \"reportType\": \"SPAM\",\r\n  \"phoneNumber\": \"+666-666-666\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -982,7 +982,7 @@
 						}
 					}
 				},
-				"url": "{{base_url}}/reports/delete/2",
+				"url": "{{base_url}}/reports/delete/9",
 				"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
 			},
 			"response": []
