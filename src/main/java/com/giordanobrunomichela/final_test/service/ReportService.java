@@ -153,6 +153,21 @@ public class ReportService {
         }
     }
 
+    public void removeAllSpamReportsForPhoneNumber(String phoneNumber) {
+        Optional<PhoneNumber> phoneNumberOpt = phoneNumberRepository.findByPhoneNumber(phoneNumber);
+
+        if (phoneNumberOpt.isPresent()) {
+            PhoneNumber phoneNumberEntity = phoneNumberOpt.get();
+            List<Report> spamReports = reportRepository.findByPhoneNumberIdAndReportType(
+                    phoneNumberEntity.getId(), ReportType.SPAM);
+
+            reportRepository.deleteAll(spamReports);
+            phoneNumberEntity.setSpamReportCount(0);
+            updatePhoneNumberStatus(phoneNumberEntity);
+            phoneNumberRepository.save(phoneNumberEntity);
+        }
+    }
+
     public ReportDTO convertToDTO(Report report) {
         ReportDTO dto = new ReportDTO();
         dto.setId(report.getId());

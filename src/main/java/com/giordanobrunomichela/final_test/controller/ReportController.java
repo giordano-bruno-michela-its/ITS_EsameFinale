@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/reports")
@@ -55,5 +56,17 @@ public class ReportController {
     public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
         reportService.deleteReport(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/remove-spam")
+    public ResponseEntity<String> removeAllSpamReports(@RequestBody Map<String, String> request) {
+        String phoneNumber = request.get("phoneNumber");
+
+        if (phoneNumber == null || phoneNumber.isEmpty()) {
+            return ResponseEntity.badRequest().body("Phone number is required");
+        }
+
+        reportService.removeAllSpamReportsForPhoneNumber(phoneNumber);
+        return ResponseEntity.ok("All SPAM reports removed for phone number: " + phoneNumber);
     }
 }

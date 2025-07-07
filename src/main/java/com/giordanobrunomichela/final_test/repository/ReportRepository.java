@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findByReportType(ReportType reportType);
+    List<Report> findByPhoneNumberIdAndReportType(Long phoneNumberId, ReportType reportType);
  }
