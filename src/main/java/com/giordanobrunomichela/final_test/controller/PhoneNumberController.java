@@ -23,6 +23,16 @@ public class PhoneNumberController {
         return phoneNumberService.getAllPhoneNumbers();
     }
 
+    @GetMapping("/spam")
+    public List<PhoneNumberDTO> getSpamPhoneNumbers() {
+        return phoneNumberService.getSpamPhoneNumbers();
+    }
+
+    @GetMapping("/nospam")
+    public List<PhoneNumberDTO> getNoSpamPhoneNumbers() {
+        return phoneNumberService.getNoSpamPhoneNumbers();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<PhoneNumberDTO> getPhoneNumberById(@PathVariable Long id) {
         PhoneNumberDTO dto = phoneNumberService.getPhoneNumberById(id);

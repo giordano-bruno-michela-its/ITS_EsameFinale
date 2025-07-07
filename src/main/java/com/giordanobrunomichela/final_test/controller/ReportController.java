@@ -23,6 +23,16 @@ public class ReportController {
         return reportService.getAllReports();
     }
 
+    @GetMapping("/spam")
+    public List<ReportDTO> getSpamReports() {
+        return reportService.getSpamReports();
+    }
+
+    @GetMapping("/nospam")
+    public List<ReportDTO> getNoSpamReports() {
+        return reportService.getNoSpamReports();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ReportDTO> getReportById(@PathVariable Long id) {
         ReportDTO dto = reportService.getReportById(id);

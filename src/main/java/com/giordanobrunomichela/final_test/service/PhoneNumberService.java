@@ -2,6 +2,7 @@ package com.giordanobrunomichela.final_test.service;
 
 import com.giordanobrunomichela.final_test.dto.PhoneNumberDTO;
 import com.giordanobrunomichela.final_test.model.PhoneNumber;
+import com.giordanobrunomichela.final_test.model.PhoneNumberStatus;
 import com.giordanobrunomichela.final_test.repository.PhoneNumberRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,18 @@ public class PhoneNumberService {
 
     public List<PhoneNumberDTO> getAllPhoneNumbers() {
         return phoneNumberRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<PhoneNumberDTO> getSpamPhoneNumbers() {
+        return phoneNumberRepository.findByPhoneNumberStatus(PhoneNumberStatus.SPAM).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<PhoneNumberDTO> getNoSpamPhoneNumbers() {
+        return phoneNumberRepository.findByPhoneNumberStatus(PhoneNumberStatus.NOSPAM).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }

@@ -30,6 +30,18 @@ public class ReportService {
                 .collect(Collectors.toList());
     }
 
+    public List<ReportDTO> getSpamReports() {
+        return reportRepository.findByReportType(ReportType.SPAM).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<ReportDTO> getNoSpamReports() {
+        return reportRepository.findByReportType(ReportType.NOSPAM).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
     public ReportDTO getReportById(Long id) {
         return reportRepository.findById(id)
                 .map(this::convertToDTO)
