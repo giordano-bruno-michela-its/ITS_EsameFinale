@@ -20,4 +20,8 @@ public class Report {
     
     @Enumerated(EnumType.STRING)
     private ReportType reportType = ReportType.NOSPAM;
+    
+    private String phoneNumber;
+    
+    private Long phoneNumberId;
 }

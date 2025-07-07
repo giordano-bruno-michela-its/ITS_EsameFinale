@@ -1,7 +1,11 @@
 package com.giordanobrunomichela.final_test.service;
 
 import com.giordanobrunomichela.final_test.dto.ReportDTO;
+import com.giordanobrunomichela.final_test.model.PhoneNumber;
+import com.giordanobrunomichela.final_test.model.PhoneNumberStatus;
 import com.giordanobrunomichela.final_test.model.Report;
+import com.giordanobrunomichela.final_test.model.ReportType;
+import com.giordanobrunomichela.final_test.repository.PhoneNumberRepository;
 import com.giordanobrunomichela.final_test.repository.ReportRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +17,15 @@ import java.util.stream.Collectors;
 @Service
 public class ReportService {
     private final ReportRepository reportRepository;
+    private final PhoneNumberRepository phoneNumberRepository;
 
-    public ReportService(ReportRepository reportRepository) {
+    public ReportService(ReportRepository reportRepository, PhoneNumberRepository phoneNumberRepository) {
         this.reportRepository = reportRepository;
+        this.phoneNumberRepository = phoneNumberRepository;
     }
 
     public List<ReportDTO> getAllReports() {
-        return reportRepository.findAll().stream()
+        return reportRepository.findAll().stream()/*  */
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -30,9 +36,45 @@ public class ReportService {
                 .orElse(null);
     }
 
+/*     public ReportDTO createReport(ReportDTO reportDTO) {
+        Report report = convertToEntity(reportDTO);
+        report.setReportDate(new Date());
+        return convertToDTO(reportRepository.save(report));
+    } */
+
     public ReportDTO createReport(ReportDTO reportDTO) {
         Report report = convertToEntity(reportDTO);
         report.setReportDate(new Date());
+        
+        if (report.getPhoneNumber() != null) {
+            Optional<PhoneNumber> existingPhoneNumber = phoneNumberRepository.findByPhoneNumber(report.getPhoneNumber());
+
+            PhoneNumber phoneNumber;
+            if (existingPhoneNumber.isEmpty()) {
+                phoneNumber = new PhoneNumber();
+                phoneNumber.setPhoneNumber(report.getPhoneNumber());
+                phoneNumber.setDescription(report.getDescription());
+                phoneNumber.setPhoneNumberStatus(PhoneNumberStatus.NOSPAM);
+                
+                if (report.getReportType() == ReportType.SPAM) {
+                    phoneNumber.setSpamReportCount(1);
+                } else {
+                    phoneNumber.setSpamReportCount(0);
+                }
+
+                phoneNumber = phoneNumberRepository.save(phoneNumber);
+            } else {
+                phoneNumber = existingPhoneNumber.get();
+                
+                if (report.getReportType() == ReportType.SPAM) {
+                    phoneNumber.setSpamReportCount(phoneNumber.getSpamReportCount() + 1);
+                    phoneNumber = phoneNumberRepository.save(phoneNumber);
+                }
+            }
+
+            report.setPhoneNumberId(phoneNumber.getId());
+        }
+
         return convertToDTO(reportRepository.save(report));
     }
 
@@ -66,6 +108,7 @@ public class ReportService {
         dto.setReportDate(report.getReportDate());
         dto.setDescription(report.getDescription());
         dto.setReportType(report.getReportType());
+        dto.setPhoneNumber(report.getPhoneNumber());
         return dto;
     }
 
@@ -75,6 +118,7 @@ public class ReportService {
         report.setReportDate(dto.getReportDate());
         report.setDescription(dto.getDescription());
         report.setReportType(dto.getReportType());
+        report.setPhoneNumber(dto.getPhoneNumber());
         return report;
     }
 }

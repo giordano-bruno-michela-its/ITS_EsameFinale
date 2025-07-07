@@ -19,4 +19,7 @@ public class ReportDTO {
 
     @Schema(example = "NOSPAM", description = "Type of report (NOSPAM or SPAM)")
     private ReportType reportType;
+
+    @Schema(example = "+1234567890", description = "Phone number being reported")
+    private String phoneNumber;
 }
