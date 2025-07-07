@@ -36,12 +36,6 @@ public class ReportService {
                 .orElse(null);
     }
 
-/*     public ReportDTO createReport(ReportDTO reportDTO) {
-        Report report = convertToEntity(reportDTO);
-        report.setReportDate(new Date());
-        return convertToDTO(reportRepository.save(report));
-    } */
-
     public ReportDTO createReport(ReportDTO reportDTO) {
         Report report = convertToEntity(reportDTO);
         report.setReportDate(new Date());
@@ -98,9 +92,30 @@ public class ReportService {
         return null;
     }
 
+/*     public void deleteReport(Long id) {
+        reportRepository.deleteById(id);
+    } */
+
     public void deleteReport(Long id) {
+    Optional<Report> reportOpt = reportRepository.findById(id);
+    if (reportOpt.isPresent()) {
+        Report report = reportOpt.get();
+        
+        if (report.getReportType() == ReportType.SPAM && report.getPhoneNumberId() != null) {
+            Optional<PhoneNumber> phoneNumberOpt = phoneNumberRepository.findById(report.getPhoneNumberId());
+            if (phoneNumberOpt.isPresent()) {
+                PhoneNumber phoneNumber = phoneNumberOpt.get();
+                int currentCount = phoneNumber.getSpamReportCount();
+                if (currentCount > 0) {
+                    phoneNumber.setSpamReportCount(currentCount - 1);
+                    phoneNumberRepository.save(phoneNumber);
+                }
+            }
+        }
+        
         reportRepository.deleteById(id);
     }
+}
 
     public ReportDTO convertToDTO(Report report) {
         ReportDTO dto = new ReportDTO();
