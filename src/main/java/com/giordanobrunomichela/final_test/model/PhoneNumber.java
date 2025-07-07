@@ -22,5 +22,6 @@ public class PhoneNumber {
     private String description;
     private String phoneNumber;
     private Integer spamReportCount;
+    private Integer noSpamReportCount;
     private PhoneNumberStatus phoneNumberStatus = PhoneNumberStatus.NOSPAM;
 }

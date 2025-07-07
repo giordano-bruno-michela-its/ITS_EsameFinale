@@ -18,6 +18,9 @@ public class PhoneNumberDTO {
     @Schema(example = "0", description = "Number of spam reports for this phone number")
     private Integer spamReportCount;
 
+    @Schema(example = "0", description = "Number of no-spam reports for this phone number")
+    private Integer noSpamReportCount;
+
     @Schema(example = "NOSPAM", description = "Status of the phone number (NOSPAM or SPAM)")
     private PhoneNumberStatus phoneNumberStatus;
 }

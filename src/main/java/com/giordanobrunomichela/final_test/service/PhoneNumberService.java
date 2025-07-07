@@ -48,6 +48,9 @@ public class PhoneNumberService {
             if (dto.getSpamReportCount() != null) {
                 phoneNumber.setSpamReportCount(dto.getSpamReportCount());
             }
+            if (dto.getNoSpamReportCount() != null) {
+                phoneNumber.setNoSpamReportCount(dto.getNoSpamReportCount());
+            }
             if (dto.getPhoneNumberStatus() != null) {
                 phoneNumber.setPhoneNumberStatus(dto.getPhoneNumberStatus());
             }
@@ -67,6 +70,7 @@ public class PhoneNumberService {
         dto.setDescription(phoneNumber.getDescription());
         dto.setPhoneNumber(phoneNumber.getPhoneNumber());
         dto.setSpamReportCount(phoneNumber.getSpamReportCount());
+        dto.setNoSpamReportCount(phoneNumber.getNoSpamReportCount());
         dto.setPhoneNumberStatus(phoneNumber.getPhoneNumberStatus());
         return dto;
     }
@@ -77,6 +81,7 @@ public class PhoneNumberService {
         phoneNumber.setDescription(dto.getDescription());
         phoneNumber.setPhoneNumber(dto.getPhoneNumber());
         phoneNumber.setSpamReportCount(dto.getSpamReportCount());
+        phoneNumber.setNoSpamReportCount(dto.getNoSpamReportCount());
         phoneNumber.setPhoneNumberStatus(dto.getPhoneNumberStatus());
         return phoneNumber;
     }
